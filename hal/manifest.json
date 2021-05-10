@@ -2,14 +2,14 @@
   "domain": "hal",
   "name": "HAL CA1006 multi-zone amplifier",
   "config_flow": true,
-  "documentation": "https://www.home-assistant.io/integrations/hal",
-  "requirements": [],
+  "documentation": "https://github.com/bradkeifer/home-assistant-custom-components",
+  "issue_tracker": "https://github.com/bradkeifer/home-assistant-custom-components/issues",
+  "dependencies": ["media_player"],
+  "requirements": ["halca1006==0.0.1"],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
-  "dependencies": [],
-  "codeowners": [
-    "@bradkeifer"
-  ],
-  "version": "0.0.1"
+  "codeowners": ["@bradkeifer"],
+  "version": "0.0.1",
+  "iot_class": "local_polling"
 }
