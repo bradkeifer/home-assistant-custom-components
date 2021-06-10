@@ -139,8 +139,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         f"entry.version {entry.version}, "
         f"entry.data {entry.data}, "
         f"entry.source {entry.source}, "
-        f"entry.connection_class {entry.connection_class}, "
-        f"entry.system_options {entry.system_options}, "
         f"entry.options {entry.options}, "
         f"entry.unique_id {entry.unique_id}, "
         f"entry.entry_id {entry.entry_id}, "
