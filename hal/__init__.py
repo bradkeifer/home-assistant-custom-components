@@ -44,13 +44,6 @@ SERVICE_SET_SELECT_INTERVAL_SCHEMA = vol.Schema(
 PLATFORMS = ["media_player"]
 
 from homeassistant.components.media_player import PLATFORM_SCHEMA, MediaPlayerEntity
-from homeassistant.components.media_player.const import (
-    SUPPORT_SELECT_SOURCE,
-    SUPPORT_TURN_OFF,
-    SUPPORT_TURN_ON,
-    SUPPORT_VOLUME_MUTE,
-    SUPPORT_VOLUME_SET,
-)
 from homeassistant.const import (
     CONF_HOST,
     CONF_NAME,
@@ -175,27 +168,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             f"Retry in {HAL_CONNECT_RETRY_INTERVAL} seconds"
         )
         asyncio.sleep(HAL_CONNECT_RETRY_INTERVAL)
+
     await hass.async_add_executor_job(hal.enable_logger)
     await hass.async_add_executor_job(
         hal.set_select_interval, entry.data[CONF_HAL_SELECT_INTERVAL]
     )
 
-    @callback
-    async def async_on_stop(event):
-        """Shutdown cleanly when hass stops."""
-        pass
-        # await hass.async_add_executor_job(hal.disconnect)
-
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, async_on_stop)
-
-    for component in PLATFORMS:
-        _LOGGER.debug(
-            f"hal.__init__.async_setup_entry: Setting up entry {entry} for component {component}."
-        )
-
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, component)
-        )
+    _LOGGER.debug(
+        f"hal.__init__.async_setup_entry: Setting up entry {entry} for platforms {PLATFORMS}."
+    )
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
 
@@ -212,14 +194,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     await hass.async_add_executor_job(hal.disconnect)
 
     _LOGGER.debug(f"async_unload_entry: hass {hass}, entry {entry}.")
-    unload_ok = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, component)
-                for component in PLATFORMS
-            ]
-        )
-    )
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
     _LOGGER.debug(f"async_unload_entry: unload_ok {unload_ok}.")
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)

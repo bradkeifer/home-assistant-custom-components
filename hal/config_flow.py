@@ -276,7 +276,6 @@ class HALConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for HAL CA1006 multi-zone amplifier."""
 
     VERSION = 1
-    # TODO pick one of the available connection classes in homeassistant/config_entries.py - done
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
 
     def __init__(self):
