@@ -90,10 +90,10 @@ async def async_setup_entry(hass, config, async_add_entities):
     for i in range(1, HAL_ZONES + 1):
         _LOGGER.debug(f"async_setup_platform: Checking if zone {i} should de defined.")
         if config.data[f"zone_{i}_valid"]:
-            _LOGGER.debug(f"Yes it is!")
+            _LOGGER.debug("Yes it is!")
             valid_zones[f"{i}"] = config.data[f"zone_{i}"]
         else:
-            _LOGGER.debug(f"No it isn't!")
+            _LOGGER.debug("No it isn't!")
     _LOGGER.debug(f"async_setup_platform: valid_zones {valid_zones}.")
 
     valid_sources = {}
@@ -103,11 +103,11 @@ async def async_setup_entry(hass, config, async_add_entities):
             f"async_setup_platform: Checking if source {i} should de defined."
         )
         if config.data[f"source_{i}_valid"]:
-            _LOGGER.debug(f"Yes it is!")
+            _LOGGER.debug("Yes it is!")
             valid_sources[i] = config.data[f"source_{i}"]
             source_list.append(config.data[f"source_{i}"])
         else:
-            _LOGGER.debug(f"No it isn't!")
+            _LOGGER.debug("No it isn't!")
     _LOGGER.debug(f"async_setup_platform: valid_sources {valid_sources}.")
     _LOGGER.debug(f"async_setup_platform: source_list {source_list}.")
 
@@ -222,14 +222,14 @@ class HALZoneDevice(MediaPlayerEntity):
     @property
     def state(self):
         """Return the state of the device."""
-        _LOGGER.debug(f"HALZoneDevice.state")
+        _LOGGER.debug("HALZoneDevice.state")
         power = self._hal.get_power(self._zone_id)
         _LOGGER.debug(f"HALZoneDevice.state: power = {power}")
         if power == HAL_ON:
-            _LOGGER.debug(f"HALZoneDevice.state is on")
+            _LOGGER.debug("HALZoneDevice.state is on")
             return STATE_ON
         else:
-            _LOGGER.debug(f"HALZoneDevice.state is off")
+            _LOGGER.debug("HALZoneDevice.state is off")
             return STATE_OFF
 
     @property
@@ -297,6 +297,7 @@ class HALZoneDevice(MediaPlayerEntity):
         for source_id, name in self._sources.items():
             if name.lower() != source.lower():
                 continue
+            _LOGGER.debug(f"Found source_id:{source_id}, for source:{source}")
             await self._hass.async_add_executor_job(
                 self._hal.set_source, self._zone_id, source_id
             )
