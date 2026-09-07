@@ -198,7 +198,6 @@ class HALZoneDevice(MediaPlayerEntity):
             "identifiers": {(DOMAIN, self._unique_id)},
             "manufacturer": MANUFACTURER,
             "model": MODEL,
-            "via_device": (DOMAIN, self._hal_name),
         }
 
     @property
